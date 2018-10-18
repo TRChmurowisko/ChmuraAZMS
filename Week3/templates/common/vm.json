@@ -14,12 +14,6 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "dnsLabelPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
-            }
-        },
         "ubuntuOSVersion": {
             "type": "string",
             "defaultValue": "18.04.0-LTS",
@@ -48,34 +42,14 @@
                 "description": "name of the runtime environment"
             }
         },
-        "virtualNetworkName": {
-            "type": "string",
-            "defaultValue": "MyVNET"
-        },
-        "addressPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16"
-        },
-        "subnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/24"
-        }
     },
     "variables": {
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'salinuxvm')]",
         "imagePublisher": "Canonical",
         "imageOffer": "UbuntuServer",
-        "nicName": "myVMNic",
-        "addressPrefix": "[parameters('addressPrefix')]",
-        "subnetName": "Subnet",
-        "subnetPrefix": "[parameters('subnetPrefix')]",
         "storageAccountType": "Standard_LRS",
-        "publicIPAddressName": "myPublicIP",
-        "publicIPAddressType": "Dynamic",
         "vmName": "[concat('vml',parameters('index'),'-','xx','-',parametrs('env')]",
         "vmSize": "Standard_A1",
-        "virtualNetworkName": "[parameters('virtualNetworkName')]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
     },
     "resources": [
         {
