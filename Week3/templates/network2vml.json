@@ -22,7 +22,7 @@
                 "description": "name of the runtime environment"
             }
         },
-        "virtualNetworkName": {
+        "networkName": {
             "type": "string",
             "defaultValue": "MyVNET"
         }
@@ -34,8 +34,7 @@
         "subnetName2": "Subnet2",
         "publicIPAddress1Name": "vml1PublicIP",
         "publicIPAddress2Name": "vml2PublicIP",
-        "vmName": "[concat('vml',parameters('index'),'-','xx','-',parametrs('env')]",
-        "virtualNetworkName": "[parameters('virtualNetworkName')]",
+        "virtualNetworkName": "[concat('vml','-',parameters('networkName'),'-',parameters('env'))]",
         "subnetRef1": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName1'))]",
         "subnetRef2": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName2'))]"
     },
@@ -147,15 +146,11 @@
     "outputs": {
         "hostname1": {
             "type": "string",
-            "value": "[reference(variables('publicIPAddress1Name')).dnsSettings.fqdn]"
+            "value": "[reference(variables('nicName1')).resourceGuid]"
         },
         "hostname2": {
             "type": "string",
             "value": "[reference(variables('publicIPAddress2Name')).dnsSettings.fqdn]"
-        },
-        "sshCommand": {
-            "type": "string",
-            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
         }
     }
 }

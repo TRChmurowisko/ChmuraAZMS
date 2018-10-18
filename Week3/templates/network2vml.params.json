@@ -1,0 +1,16 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "dnsLabelPrefix": {
+        "value": "temptr2"
+      },
+      "networkName": {
+        "value": "temptrVN2"
+      },
+      "env": {
+        "value": "STG"
+      }
+
+    }
+  }
