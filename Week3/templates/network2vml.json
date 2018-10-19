@@ -25,6 +25,22 @@
         "networkName": {
             "type": "string",
             "defaultValue": "MyVNET"
+        },
+        "admin1": {
+            "type": "string",
+            "defaultValue": "adminv1"
+        },
+        "admin1pwd": {
+            "type": "string",
+            "defaultValue": "Adminv@1"
+        },
+        "admin2": {
+            "type": "string",
+            "defaultValue": "adminv2"
+        },
+        "admin2pwd": {
+            "type": "string",
+            "defaultValue": "Adminv@2"
         }
     },
     "variables": {
@@ -160,10 +176,10 @@
                         "value": "week3-1"
                     },
                     "adminUsername": {
-                        "value": "adminv1"
+                        "value": "[parameters('admin1')]"
                     },
                     "adminPassword": {
-                        "value": "Root@10"
+                        "value": "[parameters('admin1pwd')]"
                     },
                     "env": {
                         "value": "[parameters('env')]"
@@ -192,10 +208,10 @@
                         "value": "week3-2"
                     },
                     "adminUsername": {
-                        "value": "adminv2"
+                        "value": "[parameters('admin2')]"
                     },
                     "adminPassword": {
-                        "value": "Root@10"
+                        "value": "[parameters('admin2pwd')]"
                     },
                     "env": {
                         "value": "[parameters('env')]"

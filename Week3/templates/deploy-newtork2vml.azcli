@@ -1,0 +1,1 @@
+az group deployment create -g rgp-temp --template-file templates\network2vml.json --parameters templates\network2vml.params.vault.json

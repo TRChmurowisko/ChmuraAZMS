@@ -1,0 +1,37 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsLabelPrefix": {
+      "value": "temptr2"
+    },
+    "networkName": {
+      "value": "temptrVN2"
+    },
+    "env": {
+      "value": "STG"
+    },
+    "admin1": {
+      "value": "adminv1"
+    },
+    "admin1pwd": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/subscr-guid/resourceGroups/rgp-w0cloudsch-dev/providers/Microsoft.KeyVault/vaults/kvt-cloudscg-STG"
+        },
+        "secretName": "adminv1"
+      }
+    },
+    "admin2": {
+      "value": "adminv2"
+    },
+    "admin2pwd": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/subscr-guid/resourceGroups/rgp-w0cloudsch-dev/providers/Microsoft.KeyVault/vaults/kvt-cloudscg-STG"
+        },
+        "secretName": "adminv2"
+      }
+    }
+  }
+}
