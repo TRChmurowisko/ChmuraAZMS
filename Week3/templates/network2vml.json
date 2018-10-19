@@ -173,12 +173,44 @@
                     }
                 }
             }
+        },
+        {
+            "name": "vm2Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+            ],
+            "apiVersion": "2015-01-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/TRChmurowisko/ChmuraAZMS/master/Week3/templates/common/vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "week3-2"
+                    },
+                    "adminUsername": {
+                        "value": "adminv2"
+                    },
+                    "adminPassword": {
+                        "value": "Root@10"
+                    },
+                    "env": {
+                        "value": "[parameters('env')]"
+                    },
+                    "nicName": {
+                        "value": "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+                    }
+                }
+            }
         }
     ],
     "outputs": {
         "hostname1": {
             "type": "string",
-            "value": "[reference(variables('nicName1')).resourceGuid]"
+            "value": "[reference(variables('publicIPAddress1Name')).dnsSettings.fqdn]"
         },
         "hostname2": {
             "type": "string",
