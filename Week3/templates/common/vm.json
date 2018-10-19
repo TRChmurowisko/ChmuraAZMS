@@ -126,7 +126,7 @@
     "outputs": {
         "hostname": {
             "type": "string",
-            "value": "[reference(variables('vmName')).networkProfile.networkInterfaces[0].dnsSettings.fqdn]"
+            "value": "[reference(variables('vmName')).networkProfile.networkInterfaces[0].id]"
         },
         "sshCommand": {
             "type": "string",

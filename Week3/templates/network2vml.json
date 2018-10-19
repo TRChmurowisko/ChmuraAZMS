@@ -141,6 +141,38 @@
                     }
                 ]
             }
+        },
+        {
+            "name": "vm1Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
+            ],
+            "apiVersion": "2015-01-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/TRChmurowisko/ChmuraAZMS/master/Week3/templates/common/vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "week3-1"
+                    },
+                    "adminUsername": {
+                        "value": "adminv1"
+                    },
+                    "adminPassword": {
+                        "value": "Root@10"
+                    },
+                    "env": {
+                        "value": "[parameters('env')]"
+                    },
+                    "nicName": {
+                        "value": "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
+                    }
+                }
+            }
         }
     ],
     "outputs": {
