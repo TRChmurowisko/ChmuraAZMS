@@ -1,0 +1,1 @@
+az vmss create --resource-group rgp-temp --name vmss-test2mchs --image UbuntuLTS --instance-count 2 --admin-username adminvm --generate-ssh-keys
