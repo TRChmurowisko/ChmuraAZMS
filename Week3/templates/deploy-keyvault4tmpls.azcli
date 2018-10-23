@@ -1,0 +1,1 @@
+az keyvault create --name kvt-cloudscg-STG --resource-group rgp-w0cloudsch-dev --enabled-for-template-deployment true

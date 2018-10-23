@@ -2,21 +2,27 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "vnName": {
+            "type": "string",
+            "defaultValue": "vmLinux"
+        },
         "adminUsername": {
             "type": "string",
+            "defaultValue": "adminv",
             "metadata": {
                 "description": "Admin user name for the Virtual Machine."
             }
         },
         "adminPassword": {
             "type": "securestring",
+            "defaultValue": "Root@10",
             "metadata": {
                 "description": "Password for the Virtual Machine."
             }
         },
         "ubuntuOSVersion": {
             "type": "string",
-            "defaultValue": "18.04.0-LTS",
+            "defaultValue": "18.04-LTS",
             "metadata": {
                 "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version."
             }
@@ -28,13 +34,6 @@
                 "description": "Location for all resources."
             }
         },
-        "index": {
-            "type": "int",
-            "defaultValue": "0",
-            "metadata": {
-                "description": "index in case of creating a list of vm-s"
-            }
-        },
         "env": {
             "type": "string",
             "defaultValue": "dev",
@@ -42,14 +41,24 @@
                 "description": "name of the runtime environment"
             }
         },
+        "nicName": {
+            "type": "string",
+            "metadata": {
+                "description": "name of the existing network interface"
+            }
+        },
+        "vmName": {
+            "type": "string"
+        }
     },
     "variables": {
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'salinuxvm')]",
         "imagePublisher": "Canonical",
         "imageOffer": "UbuntuServer",
         "storageAccountType": "Standard_LRS",
-        "vmName": "[concat('vml',parameters('index'),'-','xx','-',parametrs('env')]",
+        "vmName": "[concat('vml','-',parameters('vmName'),'-',parameters('env'))]",
         "vmSize": "Standard_A1",
+        "nicName": "[parameters('nicName')]"
     },
     "resources": [
         {
@@ -62,65 +71,6 @@
             },
             "kind": "Storage",
             "properties": {}
-        },
-        {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[variables('publicIPAddressName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-                "dnsSettings": {
-                    "domainNameLabel": "[parameters('dnsLabelPrefix')]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[variables('virtualNetworkName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[variables('addressPrefix')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[variables('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[variables('subnetPrefix')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nicName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
-                            },
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            }
-                        }
-                    }
-                ]
-            }
         },
         {
             "apiVersion": "2017-03-30",
@@ -160,7 +110,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                            "id": "[parameters('nicName')]"
                         }
                     ]
                 },
@@ -176,11 +126,11 @@
     "outputs": {
         "hostname": {
             "type": "string",
-            "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
+            "value": "[reference(variables('vmName')).networkProfile.networkInterfaces[0].id]"
         },
         "sshCommand": {
             "type": "string",
-            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
+            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('vmName')).vmId)]"
         }
     }
 }

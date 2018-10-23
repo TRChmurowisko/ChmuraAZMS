@@ -22,9 +22,25 @@
                 "description": "name of the runtime environment"
             }
         },
-        "virtualNetworkName": {
+        "networkName": {
             "type": "string",
             "defaultValue": "MyVNET"
+        },
+        "admin1": {
+            "type": "string",
+            "defaultValue": "adminv1"
+        },
+        "admin1pwd": {
+            "type": "string",
+            "defaultValue": "Adminv@1"
+        },
+        "admin2": {
+            "type": "string",
+            "defaultValue": "adminv2"
+        },
+        "admin2pwd": {
+            "type": "string",
+            "defaultValue": "Adminv@2"
         }
     },
     "variables": {
@@ -34,8 +50,7 @@
         "subnetName2": "Subnet2",
         "publicIPAddress1Name": "vml1PublicIP",
         "publicIPAddress2Name": "vml2PublicIP",
-        "vmName": "[concat('vml',parameters('index'),'-','xx','-',parametrs('env')]",
-        "virtualNetworkName": "[parameters('virtualNetworkName')]",
+        "virtualNetworkName": "[concat('vml','-',parameters('networkName'),'-',parameters('env'))]",
         "subnetRef1": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName1'))]",
         "subnetRef2": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName2'))]"
     },
@@ -142,6 +157,70 @@
                     }
                 ]
             }
+        },
+        {
+            "name": "vm1Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
+            ],
+            "apiVersion": "2015-01-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/TRChmurowisko/ChmuraAZMS/master/Week3/templates/common/vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "week3-1"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('admin1')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('admin1pwd')]"
+                    },
+                    "env": {
+                        "value": "[parameters('env')]"
+                    },
+                    "nicName": {
+                        "value": "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "vm2Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+            ],
+            "apiVersion": "2015-01-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/TRChmurowisko/ChmuraAZMS/master/Week3/templates/common/vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "week3-2"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('admin2')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('admin2pwd')]"
+                    },
+                    "env": {
+                        "value": "[parameters('env')]"
+                    },
+                    "nicName": {
+                        "value": "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+                    }
+                }
+            }
         }
     ],
     "outputs": {
@@ -152,10 +231,6 @@
         "hostname2": {
             "type": "string",
             "value": "[reference(variables('publicIPAddress2Name')).dnsSettings.fqdn]"
-        },
-        "sshCommand": {
-            "type": "string",
-            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
         }
     }
 }
