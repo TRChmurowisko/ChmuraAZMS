@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "ApiFunction"
+		},
+		{
+			"path": "HttpFunc"
+		},
+		{
+			"path": "QueuePicker"
+		},
+		{
+			"path": "QueueSender"
+		}
+	],
+	"settings": {}
+}
