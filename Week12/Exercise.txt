@@ -1,0 +1,1 @@
+https://github.com/Microsoft/MCW-Internet-of-Things/blob/master/Hands-on%20lab/HOL%20step-by-step%20-%20Internet%20of%20Things.md#task-2-visualize-hot-data-with-power-bi
